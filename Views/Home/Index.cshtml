@@ -1,0 +1,22 @@
+﻿@model devchat3.Models.Usuario
+
+
+
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome @Model.userName  @if(Model.isFacebook)
+        {
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/2021_Facebook_icon.svg/2048px-2021_Facebook_icon.svg.png" height="64" width="64">
+            <img src="@Model.photo" height="64" width="64">
+        }else if(Model.isGoogle)
+        {
+            <img src="https://www.edigitalagency.com.au/wp-content/uploads/google-logo-icon-PNG-Transparent-Background-letter-G-multiple-colors.png" height="64" width="64">
+            <img src="@Model.photo" height="64" width="64">
+        }
+    </h1>
+    <p>DevChat version 1.0 </p>
+</div>
+

@@ -1,0 +1,19 @@
+﻿@using System.Security.Claims
+@model List<RoomResponse>
+@{
+    ViewData["Title"] = "Chats";
+    List<RoomResponse> l = ViewData["ChatList"] as List<RoomResponse>;  
+}
+
+<div class="row">
+    <div class="col-md-8 offset-2">
+        <h2>@ViewData["Title"]</h2>
+        <ul class="list-unstyled chat-list mt-2 mb-0">
+            @*Aca traigo la lista de chats grupales y la muestro*@
+            @foreach(var e in Model)
+            {
+                <a href="~/Chat/Room?room=@e.Id&category=@e.CategoryId&senderId=@User.FindFirstValue(ClaimTypes.NameIdentifier)&@e.Name"><li class="clearfix">@e.Name</li></a>
+            }
+        </ul>
+    </div>
+</div>

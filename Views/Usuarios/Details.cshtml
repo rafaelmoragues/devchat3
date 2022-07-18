@@ -1,0 +1,52 @@
+﻿@model devchat3.Models.Usuario
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>Usuario</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.userName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.userName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.email)
+        </dd>      
+        
+        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.fullname)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.fullname)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.nac)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.nac)
+        </dd>
+        
+        
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.photo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.photo)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    
+</div>

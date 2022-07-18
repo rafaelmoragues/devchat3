@@ -1,0 +1,73 @@
+﻿@model devchat3.Models.Usuario
+
+@{
+    ViewData["Title"] = "Registrarse";
+    Layout = "";
+}
+
+<html>
+<head>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link href="https://fonts.googleapis.com/css?family=Kaushan+Script" rel="stylesheet">
+<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+<link href="~/css/Login.css" rel="stylesheet">
+    </head>
+ <body>
+    <div class="container">
+        <div class="row">
+			<div class="col-md-5 mx-auto">
+			<div id="first">
+				<div class="myform form ">
+					 <div class="logo mb-3">
+						 <div class="col-md-12 text-center">
+							<h1>@ViewData["Title"]</h1>
+						 </div>
+					</div>
+                   <form action="@Url.Action("Register","Acceso")" method="post" name="register">
+                          @if(ViewData["Mensaje"]!= null)
+                          {
+                           <div class="alert alert-danger" role="alert">
+                              @ViewData["Mensaje"]
+                           </div>
+                           }    
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Usuario</label>
+                              <input type="text" name="userName"  class="form-control" id="userName" aria-describedby="emailHelp" placeholder="Usuario">
+                           </div>
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">Email</label>
+                              <input type="email" name="email"  class="form-control" id="userName" aria-describedby="emailHelp" placeholder="Email">
+                           </div>
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">Contraseña</label>
+                              <input type="password" name="password" id="password"  class="form-control" aria-describedby="emailHelp" placeholder="Password">
+                           </div>
+                           <div class="form-group">
+                              <label for="exampleInputEmail1">Confirmar contraseña</label>
+                              <input type="password" name="confirmar" id="confirmar"  class="form-control" aria-describedby="emailHelp" placeholder="Confirmar contraseña">
+                           </div>
+                            <div class="form-group">
+                              <label for="exampleInputEmail1">Nombre completo</label>
+                              <input type="text" name="fullname" id="fullname"  class="form-control" aria-describedby="emailHelp" placeholder="Nombre Completo">
+                           </div>
+                            <div class="form-group">
+                                <label asp-for="nac" class="control-label">Fecha de nacimiento</label>
+                                <input asp-for="nac" class="form-control" />
+                                <span asp-validation-for="nac" class="text-danger"></span>
+                            </div>
+
+                           <div class="col-md-12 text-center ">
+                              <button type="submit" class=" btn btn-block mybtn btn-primary tx-tfm">Registrarse</button>
+                           </div>
+                        </form>
+				</div>
+			</div>
+
+		</div>
+      </div>   
+    </div> 
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
+</body>
+</html>

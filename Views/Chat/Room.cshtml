@@ -1,0 +1,166 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
+@model RoomResponse
+
+@{
+
+    List<RoomResponse> l = ViewData["ChatList"] as List<RoomResponse>;
+    List<MessageResponse> m = ViewData["MessageList"] as List<MessageResponse>;
+    List<Usuario> u = ViewData["UserList"] as List<Usuario>;
+}
+@{ 
+    
+    ViewData["Title"] = Model.Name;   
+}
+
+
+
+   
+
+        <div id="plist" class="people-list">
+            <div class="card-body">
+                <h2 class="card-title">Chats</h2>     
+            </div>
+            <ul class="list-unstyled chat-list mt-2 mb-0">
+                        @foreach(RoomResponse x in l)
+                        {
+                            <a href="~/Chat/Room?room=@x.Id&category=@x.CategoryId&senderId=@User.FindFirstValue(ClaimTypes.NameIdentifier)&@x.Name"> <li class="clearfix">@x.Name</li></a>
+                                
+                        }
+                       
+            </ul>
+                    
+        </div>
+
+        <div class="chat">
+
+                <div class="chat-header clearfix">
+                    <button class="btn btn-dark w-100" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">Users</button>
+
+                    <div class="offcanvas offcanvas-end bg-dark " tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+                          <div class="offcanvas-header">
+                                <h5 class="offcanvas-title" id="offcanvasRightLabel">Users</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                          </div>
+                          <div class="offcanvas-body people-list overflow-auto">
+                                <ul class="list-unstyled chat-list mt-2 mb-0">
+                                @foreach(Usuario x in u)
+                                {
+                                    if (x.Id.ToString() != User.FindFirstValue(ClaimTypes.NameIdentifier)) {
+                                        <a href="~/Chat/setPrivateRoom?receiverId=@x.Id&senderName=@User.FindFirstValue(ClaimTypes.Name)&senderId=@User.FindFirstValue(ClaimTypes.NameIdentifier)&receiverName=@x.userName"> <li class="clearfix">@x.userName</li></a>
+                                    }
+                                }
+                                </ul>
+                          </div>
+                    </div>            
+                </div>
+            <div class="chat-history" id="chat">
+                <ul class="m-b-0" id="messages">
+            @{
+
+                foreach (var item in m)
+                {
+                    if (item.UserId == User.FindFirstValue(ClaimTypes.NameIdentifier))
+                    {
+                                                    <li id="@item.Id" class='clearfix'>
+                                                        <div class="answer right">
+                                                            <div class="name">@User.Identity?.Name</div>
+                                                            <div class="text">@item.MessageBody</div>
+                                                            <div class="time">@item.Date</div>
+                                                        </div>
+                                                    </li>
+
+                    }
+                    else
+                    {
+                                                    <li id="@item.Id" class='clearfix'>
+                                                        <div class="answer left">
+                                                            <div class="name">@item.UserName<div>
+                                                            <div class="text">@item.MessageBody</div>
+                                                            <div class="time">@item.Date</div>
+                                                        </div>
+                                                    </li>
+                    }     
+                }
+                    }
+
+                </ul>
+
+                <div class="col-6">
+                    <div id="notifications">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-message clearfix">
+                <div class="input-group mb-0">
+                    <div class="input-group-prepend">
+                        <span id="btnSend" class="input-group-text"><i class="fa fa-send" style="font-size:24px"></i></span>
+                    </div>
+                    <input type="text" class="form-control" placeholder="Envie a @ViewData["Title"]" id="message">                                    
+                </div>
+            </div>
+        </div>
+        
+                
+
+
+
+
+
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+
+<script>
+window.onload = function() {
+  const element = document.getElementById("chat");
+   element.scrollTop = element.scrollHeight;
+};
+
+
+    var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+    connection.start().then(() => {
+        connection.invoke("AddToGroup", "@Model.Name")
+    });
+    document.getElementById("btnSend").addEventListener("click", (event) => {
+        let room = "@Model.Name";
+        let roomId = @Model.Id;
+        let user = "@User.Identity.Name";
+        let message = document.getElementById("message").value;
+        let userId = "@User.FindFirstValue(ClaimTypes.NameIdentifier)";
+        connection.invoke("SendMessage", room, roomId,  user, message, userId)
+
+        document.getElementById("message").value = "";
+        document.getElementById("ulMessages").focus();
+
+        event.preventDefault();
+    })
+
+    connection.on("RecieveMessage", (userid, user, message, date) => {
+        let u = "@User.FindFirstValue(ClaimTypes.NameIdentifier).ToString()";
+        if (userid !== u) {
+            var message = "<li class='clearfix'><div class='answer left'><div class='name'>" + user + "</div><div class='text'>" + message + "</div><div class='time'>" + date + "</div></div></li>";
+
+        }
+        else {
+            var message = "<li class='clearfix'><div class='answer right'><div class='name'>" + user + "</div><div class='text'>" + message + "</div><div class='time'>" + date + "</div></div></li>";
+        }
+        
+        document.getElementById("messages").innerHTML =
+              document.getElementById("messages").innerHTML + message;
+
+        
+    const element = document.getElementById("chat");
+   element.scrollTop = element.scrollHeight;
+        
+    });
+
+    connection.on("Bienvenido", (message) => {
+        var message = "<div><b>" + message + "</b></div>";
+        document.getElementById("notifications").innerHTML =
+             document.getElementById("notifications").innerHTML + message;
+    });
+
+
+</script>
